@@ -1,0 +1,26 @@
+name: CI - El Estándar Java 21
+
+on:
+  push:
+
+jobs:
+  build-test:
+    name: Compilar y Pasar Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código fuente
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21 (Zulu)
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+          java-package: jdk
+
+      - name: Verificar versión de Java
+        run: java -version
+
+      - name: Compilar y ejecutar tests con Maven
+        run: mvn test
