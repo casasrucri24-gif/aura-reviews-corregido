@@ -31,9 +31,9 @@ jobs:
       - name: Notificar estado del despliegue
         run: |
           echo "============================================"
-          echo "✅ DESPLIEGUE COMPLETADO CON ÉXITO"
-          echo "📅 Fecha: $(date '+%d/%m/%Y %H:%M:%S')"
-          echo "👤 Autor: ${{ github.actor }}"
-          echo "🔀 Rama: ${{ github.ref_name }}"
-          echo "📦 Repositorio: ${{ github.repository }}"
+          echo "DESPLIEGUE COMPLETADO CON ÉXITO"
+          echo "Fecha: $(date '+%d/%m/%Y %H:%M:%S')"
+          echo "Autor: ${{ github.actor }}"
+          echo "Rama: ${{ github.ref_name }}"
+          echo "Repositorio: ${{ github.repository }}"
           echo "============================================"

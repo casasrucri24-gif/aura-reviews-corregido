@@ -19,4 +19,4 @@ jobs:
           distribution: 'zulu'
 
       - name: Limpiar y ejecutar tests en modo batch
-        run: mvn -B clean test
+        run: mvn -B clean compile

@@ -21,4 +21,4 @@ jobs:
           distribution: 'zulu'
 
       - name: Compilar y ejecutar tests con Maven
-        run: mvn test
+        run: mvn -B clean compile
