@@ -1,0 +1,32 @@
+name: CD - Despliegue Remoto por SSH
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Generar y Desplegar por SCP
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código fuente
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21 (Zulu) con caché de Maven
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+          cache: maven
+
+      - name: Generar el paquete WAR (sin tests)
+        run: mvn -B package -DskipTests
+
+      - name: Enviar WAR al servidor remoto por SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: target/*.war
+          target: /opt/aura-reviews/
