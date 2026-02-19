@@ -20,4 +20,3 @@ jobs:
 
       - name: Compilar el proyecto con Maven
         run: mvn compile
-        working-directory: aura-reviews
