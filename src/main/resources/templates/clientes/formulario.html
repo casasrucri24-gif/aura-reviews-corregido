@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head(${titulo})}"></head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <main class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card">
+                    <div class="card-header bg-white py-3">
+                        <h4 class="mb-0"><i class="bi bi-person-plus me-2"></i><span th:text="${titulo}"></span></h4>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/clientes/guardar}" th:object="${cliente}" method="post">
+                            <input type="hidden" th:field="*{id}">
+                            
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="nombre" th:field="*{nombre}" required maxlength="100">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="edad" class="form-label">Edad <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="edad" th:field="*{edad}" required min="0" max="120">
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="genero" class="form-label">Género <span class="text-danger">*</span></label>
+                                <select class="form-select" id="genero" th:field="*{genero}" required>
+                                    <option value="">Selecciona...</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Femenino">Femenino</option>
+                                    <option value="Otro">Otro</option>
+                                    <option value="Prefiero no decirlo">Prefiero no decirlo</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="intolerancia" 
+                                           th:field="*{intolerancia}" onchange="toggleDetalle()">
+                                    <label class="form-check-label" for="intolerancia">¿Tiene intolerancia alimentaria?</label>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3" id="detalleDiv" th:style="${cliente.intolerancia} ? '' : 'display:none'">
+                                <label for="detalleIntolerancia" class="form-label">Detalle</label>
+                                <textarea class="form-control" id="detalleIntolerancia" th:field="*{detalleIntolerancia}" rows="2"></textarea>
+                            </div>
+                            
+                            <div class="d-flex gap-2 justify-content-end mt-4">
+                                <a href="/clientes" class="btn btn-outline-secondary">Cancelar</a>
+                                <button type="submit" class="btn btn-primary">Guardar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <div th:replace="~{fragments/scripts :: scripts}"></div>
+    
+    <script>
+        function toggleDetalle() {
+            var div = document.getElementById('detalleDiv');
+            var check = document.getElementById('intolerancia');
+            div.style.display = check.checked ? 'block' : 'none';
+            if (!check.checked) document.getElementById('detalleIntolerancia').value = '';
+        }
+    </script>
+</body>
+</html>

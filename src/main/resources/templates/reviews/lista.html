@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Reviews')}"></head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <main class="container py-4">
+        <div th:if="${mensaje}" class="alert alert-dismissible fade show" 
+             th:classappend="'alert-' + ${tipoMensaje}" role="alert">
+            <span th:text="${mensaje}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h3 mb-1"><i class="bi bi-chat-square-text me-2"></i>Gestión de Reviews</h1>
+                <p class="text-muted mb-0">
+                    Total: <span th:text="${totalReviews}" class="fw-bold">0</span> | 
+                    Media: <span th:text="${#numbers.formatDecimal(mediaValoracion, 1, 2)}" class="fw-bold">0</span> ★
+                </p>
+            </div>
+            <a href="/reviews/nuevo" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-1"></i>Nueva Review
+            </a>
+        </div>
+
+        <div class="row">
+            <div th:if="${#lists.isEmpty(reviews)}" class="col-12">
+                <div class="card">
+                    <div class="card-body text-center py-5 text-muted">
+                        <i class="bi bi-chat-square fs-1 d-block mb-2"></i>No hay reviews
+                    </div>
+                </div>
+            </div>
+            
+            <div th:each="review : ${reviews}" class="col-md-6 col-lg-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-white d-flex justify-content-between py-3">
+                        <span><i class="bi bi-person-circle me-1"></i><span th:text="${review.cliente.nombre}" class="fw-bold"></span></span>
+                        <span class="badge bg-secondary">#<span th:text="${review.id}"></span></span>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                <i class="bi" th:classappend="${i <= review.valoracion} ? 'bi-star-fill text-warning' : 'bi-star text-muted'"></i>
+                            </span>
+                            <span class="ms-2 badge" 
+                                  th:classappend="${review.valoracion >= 4} ? 'bg-success' : (${review.valoracion >= 3} ? 'bg-warning text-dark' : 'bg-danger')"
+                                  th:text="${review.valoracion} + '/5'"></span>
+                        </div>
+                        <p class="card-text" th:text="${review.descripcion}"></p>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div class="btn-group btn-group-sm w-100">
+                            <a th:href="@{/reviews/editar/{id}(id=${review.id})}" class="btn btn-outline-warning">
+                                <i class="bi bi-pencil me-1"></i>Editar
+                            </a>
+                            <a th:href="@{/reviews/eliminar/{id}(id=${review.id})}" class="btn btn-outline-danger"
+                               onclick="return confirm('¿Eliminar esta review?')">
+                                <i class="bi bi-trash me-1"></i>Eliminar
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <div th:replace="~{fragments/scripts :: scripts}"></div>
+</body>
+</html>

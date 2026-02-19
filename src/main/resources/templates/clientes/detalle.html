@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Detalle Cliente')}"></head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <main class="container py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-6 col-md-8">
+                <div class="card">
+                    <div class="card-header bg-white py-3 d-flex justify-content-between">
+                        <h4 class="mb-0"><i class="bi bi-person-circle me-2"></i>Detalle del Cliente</h4>
+                        <span class="badge bg-primary fs-6">#<span th:text="${cliente.id}"></span></span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-4 text-muted">Nombre:</div>
+                            <div class="col-8 fw-bold" th:text="${cliente.nombre}"></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-4 text-muted">Edad:</div>
+                            <div class="col-8" th:text="${cliente.edad} + ' años'"></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-4 text-muted">Género:</div>
+                            <div class="col-8" th:text="${cliente.genero}"></div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-4 text-muted">Intolerancia:</div>
+                            <div class="col-8">
+                                <span th:if="${cliente.intolerancia}" class="badge bg-warning text-dark">Sí</span>
+                                <span th:unless="${cliente.intolerancia}" class="badge bg-success">No</span>
+                            </div>
+                        </div>
+                        <div th:if="${cliente.intolerancia}" class="row mb-3">
+                            <div class="col-4 text-muted">Detalle:</div>
+                            <div class="col-8" th:text="${cliente.detalleIntolerancia}"></div>
+                        </div>
+                        
+                        <!-- Review si existe -->
+                        <div th:if="${cliente.review != null}" class="mt-4 pt-3 border-top">
+                            <h6><i class="bi bi-chat-square-text me-1"></i>Review</h6>
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <span th:each="i : ${#numbers.sequence(1, 5)}">
+                                        <i th:classappend="${i <= cliente.review.valoracion} ? 'bi-star-fill text-warning' : 'bi-star text-muted'"></i>
+                                    </span>
+                                    <p class="mt-2 mb-0" th:text="${cliente.review.descripcion}"></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex gap-2 justify-content-end mt-4">
+                            <a href="/clientes" class="btn btn-outline-secondary">Volver</a>
+                            <a th:href="@{/clientes/editar/{id}(id=${cliente.id})}" class="btn btn-warning">Editar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <div th:replace="~{fragments/scripts :: scripts}"></div>
+</body>
+</html>

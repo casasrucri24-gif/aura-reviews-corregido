@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(titulo)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${titulo} + ' - Aura Reviews'">Aura Reviews</title>
+
+    <!-- Bootstrap 5.3.8 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+          crossorigin="anonymous">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --indigo: #6366f1;
+            --indigo-dark: #4f46e5;
+            --bg: #f5f6fa;
+        }
+
+        body {
+            background-color: var(--bg);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+        }
+
+        /* Navbar: enlace activo con color indigo */
+        .navbar .nav-link.active {
+            color: var(--indigo) !important;
+            background-color: rgba(99, 102, 241, 0.08);
+        }
+
+        .navbar .nav-link:hover {
+            color: var(--indigo);
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+
+        /* Tarjetas */
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 1px 8px rgba(0, 0, 0, 0.07);
+        }
+
+        /* Botón principal */
+        .btn-primary {
+            background-color: var(--indigo);
+            border-color: var(--indigo);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--indigo-dark);
+            border-color: var(--indigo-dark);
+        }
+
+        /* KPI cards en informes */
+        .kpi-card {
+            border-left: 4px solid var(--indigo);
+        }
+
+        .kpi-card .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--indigo);
+        }
+    </style>
+</head>
+</html>

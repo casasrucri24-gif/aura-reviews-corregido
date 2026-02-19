@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Informes')}"></head>
+<body>
+    <nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+    <main class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h3 mb-1"><i class="bi bi-bar-chart me-2"></i>Informes y Estadísticas</h1>
+                <p class="text-muted mb-0">Dashboard con KPIs del negocio</p>
+            </div>
+            <button class="btn btn-outline-secondary" onclick="window.print()">
+                <i class="bi bi-printer me-1"></i>Imprimir
+            </button>
+        </div>
+
+        <!-- KPIs -->
+        <div class="row mb-4">
+            <div class="col-md-4 mb-3">
+                <div class="card kpi-card">
+                    <div class="card-body">
+                        <div class="text-muted small">Total Clientes</div>
+                        <div class="kpi-value" th:text="${totalClientes}">0</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card kpi-card">
+                    <div class="card-body">
+                        <div class="text-muted small">Total Reviews</div>
+                        <div class="kpi-value" th:text="${totalReviews}">0</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card kpi-card">
+                    <div class="card-body">
+                        <div class="text-muted small">Valoración Media</div>
+                        <div class="kpi-value"><span th:text="${mediaValoracion}">0</span> ★</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Graficos -->
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0"><i class="bi bi-pie-chart me-2"></i>Clientes por Género</h5>
+                    </div>
+                    <div class="card-body"><canvas id="chartGenero"></canvas></div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0"><i class="bi bi-bar-chart me-2"></i>Reviews por Nº de Estrellas</h5>
+                    </div>
+                    <div class="card-body"><canvas id="chartValoracion"></canvas></div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0"><i class="bi bi-people me-2"></i>Clientes por Franja de Edad</h5>
+                    </div>
+                    <div class="card-body"><canvas id="chartEdad"></canvas></div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header bg-white py-3">
+                        <h5 class="mb-0"><i class="bi bi-exclamation-triangle me-2"></i>Intolerancias Alimentarias</h5>
+                        <small class="text-muted">Gráfico libre: útil para personalizar el menú</small>
+                    </div>
+                    <div class="card-body"><canvas id="chartIntolerancia"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <div th:replace="~{fragments/scripts :: scripts}"></div>
+
+    <script th:inline="javascript">
+        // Datos del backend
+        const labelsGenero = /*[[${labelsGenero}]]*/ [];
+        const valoresGenero = /*[[${valoresGenero}]]*/ [];
+        const labelsValoracion = /*[[${labelsValoracion}]]*/ [];
+        const valoresValoracion = /*[[${valoresValoracion}]]*/ [];
+        const labelsEdad = /*[[${labelsEdad}]]*/ [];
+        const valoresEdad = /*[[${valoresEdad}]]*/ [];
+        const labelsIntolerancia = /*[[${labelsIntolerancia}]]*/ [];
+        const valoresIntolerancia = /*[[${valoresIntolerancia}]]*/ [];
+
+        const colores = ['rgba(99,102,241,0.8)', 'rgba(236,72,153,0.8)', 'rgba(34,197,94,0.8)', 
+                         'rgba(251,146,60,0.8)', 'rgba(59,130,246,0.8)', 'rgba(168,85,247,0.8)'];
+
+        // Grafico 1: Genero (Doughnut)
+        new Chart(document.getElementById('chartGenero'), {
+            type: 'doughnut',
+            data: { labels: labelsGenero, datasets: [{ data: valoresGenero, backgroundColor: colores }] },
+            options: { plugins: { legend: { position: 'bottom' } } }
+        });
+
+        // Grafico 2: Valoraciones (Bar)
+        new Chart(document.getElementById('chartValoracion'), {
+            type: 'bar',
+            data: {
+                labels: labelsValoracion,
+                datasets: [{ label: 'Reviews', data: valoresValoracion,
+                    backgroundColor: ['rgba(239,68,68,0.8)', 'rgba(251,146,60,0.8)', 'rgba(250,204,21,0.8)', 
+                                      'rgba(132,204,22,0.8)', 'rgba(34,197,94,0.8)'] }]
+            },
+            options: { scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } }
+        });
+
+        // Grafico 3: Edades (Bar horizontal)
+        new Chart(document.getElementById('chartEdad'), {
+            type: 'bar',
+            data: { labels: labelsEdad, datasets: [{ label: 'Clientes', data: valoresEdad, backgroundColor: 'rgba(99,102,241,0.8)' }] },
+            options: { indexAxis: 'y', scales: { x: { beginAtZero: true } }, plugins: { legend: { display: false } } }
+        });
+
+        // Grafico 4: Intolerancias (Polar)
+        new Chart(document.getElementById('chartIntolerancia'), {
+            type: 'polarArea',
+            data: { labels: labelsIntolerancia, datasets: [{ data: valoresIntolerancia, backgroundColor: ['rgba(34,197,94,0.7)', 'rgba(251,146,60,0.7)'] }] },
+            options: { plugins: { legend: { position: 'bottom' } } }
+        });
+    </script>
+</body>
+</html>

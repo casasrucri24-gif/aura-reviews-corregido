@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<nav th:fragment="navbar" class="navbar navbar-expand-lg bg-white border-bottom shadow-sm">
+    <div class="container">
+
+        <!-- Logo / Marca -->
+        <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+            <i class="bi bi-star-fill" style="color: #6366f1;"></i>
+            <span style="font-weight: 700; color: #1e1b4b;">Aura Reviews</span>
+        </a>
+
+        <!-- Botón mobile -->
+        <button class="navbar-toggler border-0" type="button"
+                data-bs-toggle="collapse" data-bs-target="#navbarPrincipal"
+                aria-controls="navbarPrincipal" aria-expanded="false"
+                aria-label="Abrir menú">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Menú de navegación -->
+        <div class="collapse navbar-collapse" id="navbarPrincipal">
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0 gap-1">
+                <li class="nav-item">
+                    <a class="nav-link px-3 py-2 rounded"
+                       th:classappend="${#request.requestURI.startsWith('/clientes')} ? 'active fw-semibold'"
+                       href="/clientes">
+                        <i class="bi bi-people me-1"></i>Clientes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 py-2 rounded"
+                       th:classappend="${#request.requestURI.startsWith('/reviews')} ? 'active fw-semibold'"
+                       href="/reviews">
+                        <i class="bi bi-chat-square-text me-1"></i>Reviews
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 py-2 rounded"
+                       th:classappend="${#request.requestURI.startsWith('/informes')} ? 'active fw-semibold'"
+                       href="/informes">
+                        <i class="bi bi-bar-chart-line me-1"></i>Informes
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</nav>
+</html>
