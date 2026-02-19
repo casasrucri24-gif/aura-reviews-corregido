@@ -1,0 +1,23 @@
+name: CI - Memoria Inteligente (Caching)
+
+on:
+  push:
+
+jobs:
+  build-test:
+    name: Compilar y Pasar Tests con Caché
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código fuente
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21 (Zulu) con caché de Maven
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+          cache: maven
+
+      - name: Limpiar y ejecutar tests en modo batch
+        run: mvn -B clean test
