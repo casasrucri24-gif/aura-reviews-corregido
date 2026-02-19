@@ -1,0 +1,31 @@
+name: CD - Web de Documentación Técnica
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  javadoc:
+    name: Generar y Desplegar Javadoc
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código fuente
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21 (Zulu) con caché de Maven
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+          cache: maven
+
+      - name: Generar Javadoc
+        run: mvn -B javadoc:javadoc
+
+      - name: Desplegar Javadoc en GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: target/site/apidocs
+          branch: gh-pages
