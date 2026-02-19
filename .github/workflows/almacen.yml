@@ -1,0 +1,29 @@
+name: CD - El Almacén de Ejecutables
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Generar y Publicar WAR
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código fuente
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21 (Zulu) con caché de Maven
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+          cache: maven
+
+      - name: Generar el paquete WAR (sin tests)
+        run: mvn -B package -DskipTests
+
+      - name: Subir el WAR como artefacto descargable
+        uses: actions/upload-artifact@v4
+        with:
+          name: aura-reviews-war
+          path: target/*.war
