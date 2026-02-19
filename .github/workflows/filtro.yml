@@ -6,8 +6,8 @@ on:
       - feature-dev
 
 jobs:
-  build:
-    name: Compilar y Verificar
+  build-test:
+    name: Compilar y Pasar Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -20,5 +20,5 @@ jobs:
           java-version: '21'
           distribution: 'zulu'
 
-      - name: Compilar el proyecto con Maven
-        run: mvn compile
+      - name: Compilar y ejecutar tests con Maven
+        run: mvn test
