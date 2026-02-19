@@ -1,0 +1,26 @@
+name: CI - Escaneo de Vulnerabilidades (SecOps)
+
+on:
+  push:
+
+jobs:
+  build-test:
+    name: Compilar, Testear y Escanear Vulnerabilidades
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el código fuente
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21 (Zulu) con caché de Maven
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+          cache: maven
+
+      - name: Limpiar y ejecutar tests en modo batch
+        run: mvn -B clean test
+
+      - name: Escanear vulnerabilidades con OWASP Dependency-Check
+        run: mvn org.owasp:dependency-check-maven:check
