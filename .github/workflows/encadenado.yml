@@ -1,0 +1,34 @@
+name: CD - Flujos Encadenados
+
+on:
+  workflow_run:
+    workflows:
+      - "CI - Limpieza y Silencio (Modo Batch)"
+    types:
+      - completed
+
+jobs:
+  deploy:
+    name: Desplegar solo si CI pasó
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - name: Descargar el código fuente
+        uses: actions/checkout@v4
+
+      - name: Configurar Java 21 (Zulu) con caché de Maven
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'zulu'
+          cache: maven
+
+      - name: Generar el paquete WAR (sin tests)
+        run: mvn -B package -DskipTests
+
+      - name: Subir el WAR como artefacto descargable
+        uses: actions/upload-artifact@v4
+        with:
+          name: aura-reviews-war
+          path: target/*.war
